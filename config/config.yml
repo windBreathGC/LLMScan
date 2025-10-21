@@ -1,0 +1,4 @@
+host: 0.0.0.0 # 默认服务器地址
+port: 8888 # 服务器端口
+log_level: INFO # 日志等级
+database: sqlite+aiosqlite:///D:\\database.db # 数据库地址

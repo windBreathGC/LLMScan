@@ -3,7 +3,7 @@ from sanic.response import json
 
 from constants.constant import SANIC_NAME
 
-app = Sanic(SANIC_NAME)
+app = Sanic.get_app(name=SANIC_NAME, force_create=True)
 
 
 @app.route('/')
