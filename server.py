@@ -17,9 +17,9 @@ def get_config_content(file_path: Path) -> Dict:
     """解析yml文件"""
     if not file_path.exists() or not file_path.is_file():
         return {}
-    with file_path.open(encoding="utf-8") as content:
+    with file_path.open(encoding="utf-8") as temp:
         try:
-            return list(yaml.load_all(content, Loader=yaml.SafeLoader))[0]
+            return list(yaml.load_all(temp, Loader=yaml.SafeLoader))[0]
         except (yaml.scanner.ScannerError, yaml.parser.ParserError):
             return {}
 
