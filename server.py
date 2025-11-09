@@ -13,6 +13,8 @@ from yaml.scanner import ScannerError
 from base.base import ServiceBase
 from constants.constant import SANIC_NAME
 from model.model import Base
+from services.file_manager import FileManager
+from services.promtp_manager import PromptManager
 
 
 def get_config_content(file_path: Path) -> Dict:
@@ -30,6 +32,13 @@ async def init_database():
     """初始化数据库表结构"""
     async with engine.begin() as conn:
         await conn.run_sync(Base.metadata.create_all)
+
+
+def init_services():
+    """初始化服务"""
+    FileManager()
+    PromptManager(app)
+
 
 # Sanic对于不同的操作系统，需要设置不同的启动方法，不然会报错
 Sanic.START_METHOD_SET = True
@@ -51,6 +60,8 @@ app = Sanic(SANIC_NAME, log_config=LOGGING_CONFIG_DEFAULTS)
 
 # 引入路由
 import api.api
+# 初始化服务
+init_services()
 
 if __name__ == "__main__":
     app.run(host=content.get("host"), port=content.get("port"), debug=False, access_log=False)

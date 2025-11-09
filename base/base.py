@@ -12,9 +12,10 @@ class ServiceBase(object):
     def session(self) -> AsyncSession:
         return self.__session
 
-    def add_service(self, name: str):
-        self.__services[name] = self
+    def add_service(self, name: str, service):
+        self.__services[name] = service
 
-    def get_service(self, name: str):
-        return self.__services.get(name)
+    @classmethod
+    def get_service(cls, name: str):
+        return cls.__services.get(name)
 

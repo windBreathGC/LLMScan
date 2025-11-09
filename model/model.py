@@ -31,7 +31,7 @@ class BaseModel(Base):
         return cls._meta.field_map
 
 
-class Prompt(BaseModel):
+class PromptModel(BaseModel):
     """测试用例"""
     __tablename__ = "t_prompt"
     id = Column(Integer, primary_key=True, doc="主键", autoincrement=True)
@@ -42,11 +42,7 @@ class Prompt(BaseModel):
     response = Column(String(1024), nullable=True, doc="参考回答")
 
 
-class Datetime:
-    pass
-
-
-class Record(BaseModel):
+class RecordModel(BaseModel):
     """测试记录"""
     __tablename__ = "t_record"
     id = Column(Integer, primary_key=True, doc="主键", autoincrement=True)
