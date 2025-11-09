@@ -1,3 +1,4 @@
+import asyncio
 import platform
 from pathlib import Path
 from typing import Dict
@@ -11,6 +12,7 @@ from yaml.scanner import ScannerError
 
 from base.base import ServiceBase
 from constants.constant import SANIC_NAME
+from model.model import Base
 
 
 def get_config_content(file_path: Path) -> Dict:
@@ -23,6 +25,11 @@ def get_config_content(file_path: Path) -> Dict:
         except (yaml.scanner.ScannerError, yaml.parser.ParserError):
             return {}
 
+
+async def init_database():
+    """初始化数据库表结构"""
+    async with engine.begin() as conn:
+        await conn.run_sync(Base.metadata.create_all)
 
 # Sanic对于不同的操作系统，需要设置不同的启动方法，不然会报错
 Sanic.START_METHOD_SET = True
@@ -37,6 +44,8 @@ LOGGING_CONFIG_DEFAULTS["loggers"]["sanic.error"]["level"] = "ERROR"
 engine = create_async_engine(content.get("database"), echo=True)
 session = async_sessionmaker(bind=engine, autoflush=False, autocommit=False, expire_on_commit=False)
 ServiceBase.set_session(session())
+# 创建数据库表结构
+asyncio.run(init_database())
 # 启动服务，同时指定日志配置
 app = Sanic(SANIC_NAME, log_config=LOGGING_CONFIG_DEFAULTS)
 
